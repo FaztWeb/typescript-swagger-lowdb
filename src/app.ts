@@ -3,6 +3,8 @@ import cors from "cors";
 import lowdb from "lowdb";
 import FileSync from "lowdb/adapters/FileSync";
 import { nanoid } from "nanoid";
+import swaggerUI from "swagger-ui-express";
+import swaggerJsDoc from "swagger-jsdoc";
 
 type Task = {
   id: string;
@@ -26,6 +28,26 @@ app.set("port", process.env.PORT || 3000);
 
 app.use(cors());
 app.use(express.json());
+
+const options = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Tasks API",
+      version: "1.0.0",
+      description: "A simple express library API",
+    },
+    servers: [
+      {
+        url: "http://localhost:3000",
+      },
+    ],
+  },
+  apis: ["./src/routes/*.js"],
+};
+
+const specs = swaggerJsDoc(options);
+app.use("/docs", swaggerUI.serve, swaggerUI.setup(specs));
 
 app.get("/tasks", (req, res) => {
   const data = db.get("tasks").value();
