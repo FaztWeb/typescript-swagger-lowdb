@@ -25,6 +25,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "dev": "nodemon"
+    "dev": "nodemon",
+    "start": "node build/index.js"
   }
 }
